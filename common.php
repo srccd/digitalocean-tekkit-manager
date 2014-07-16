@@ -85,12 +85,12 @@ function getDropletsOfflineArr($data) {
 }
 
 function printDroplets($data) {
-	global $thedropletname;
+	global $thedropletname, $minecraftport;
 	foreach($data->droplets as $mydata) {
 		$servername=$mydata->name;
 		$serverstatus=$mydata->status;
 		if ($servername==$thedropletname) {
-			echo $mydata->name . " (" . $serverstatus . "; IP Address " . $mydata->ip_address . ")<br />";
+			echo $mydata->name . " (" . $serverstatus . "; IP Address <a target=\"_blank\" href=\"index_minecraft_stats.php?ip=" . $mydata->ip_address . "&port=" . $minecraftport . "\">" . $mydata->ip_address . "</a>)<br />";
 		}
 	}
 }
