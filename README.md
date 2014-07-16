@@ -1,8 +1,9 @@
 digitalocean-tekkit-manager
 ===========================
 
-Manage Tekkit Server droplets on DigitalOcean
-v1.0
+Manage Tekkit Server droplets on DigitalOcean.
+
+This is v1.0.
 
 A complete description can be found here:  
 http://hi.srccd.com/post/hosting-minecraft-on-digitalocean
