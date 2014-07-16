@@ -4,15 +4,20 @@ Written by SrcCd.com.
 */
 
 // Add your own client ID here
-$myClientID="***ADD YOURS***";
+$myClientID="8143ec8b02c507132cd3f2c68389c4c5";
 
 // Add your own API keys here
-$myDOApi="***ADD YOURS***";
+$myDOApi="4375850bd5f9b132f31d62d0d77a07f5";
 
-$thedropletname = "myMC";
+$thedropletname = "rpdMC";
 $dropletsize = "1gb";
-$dropletlocation = "nyc2";
-$minecraftport = "24432";
+$dropletlocation = "nyc1";
+$minecraftport = "25565";
+
+//NameSilo API stuff
+$namesilo_apikey = "8496df83490597449e53135e";
+$namesilo_domain = "ohcarp.com"; //like test.com
+$namesilo_subdomain = "mc"; //like minecraft, which would make minecraft.test.com
 
 function getDroplets() {
 	global $myClientID, $myDOApi;
@@ -144,6 +149,26 @@ function stepNew($sarr, $stype, $saction, $totalservers=0) {
 		$mccnt++;
 		echo "<a target=\"_blank\" href=\"bounce.php?go=new&type=".$stype."&iid=".$mcvalue."\" onclick=\"return confirm('Really ".$saction."?');\">" . $stype.$mccnt . "</a> | ";
 	}
+}
+
+function getDomainID() {
+	global $namesilo_apikey, $namesilo_domain, $namesilo_subdomain;
+	$getDomainID = 0;
+	$thexml = file_get_contents("https://www.namesilo.com/api/dnsListRecords?version=1&type=xml&key=".$namesilo_apikey."&domain=".$namesilo_domain);
+	$data = simplexml_load_string($thexml);
+	if (isset($data->reply->code)) {
+		$eventstatus = $data->reply->code;
+		if ($eventstatus=="300") {
+			foreach($data->reply->resource_record as $mydata) {
+				$subdomainid=$mydata->record_id;
+				$subdomainhost=$mydata->host;
+				if ($subdomainhost==$namesilo_subdomain.".".$namesilo_domain) {
+					$getDomainID = $subdomainid;
+				}
+			}
+		}
+	}
+	return $getDomainID;
 }
 
 function getEvent($json) {

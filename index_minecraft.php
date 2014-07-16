@@ -70,5 +70,19 @@ if ($whatlevel!="A") header( 'Location: index.php?logout=yes' );
 		</ol>
 	</p>
 
+	<p>May also want to update my domain DNS with the new IP:
+		<ol>
+			<li>Update the DNS entry for <?=$namesilo_subdomain?>.<?=$namesilo_domain?> - 
+			<?php
+			$domainid = getDomainID();
+			if ($domainid=="0") {
+				echo "domain ID not found";
+			}else{
+				echo "<form action=\"https://www.namesilo.com/api/dnsUpdateRecord\" method=\"get\" target=\"_blank\"><input type=\"hidden\" name=\"version\" value=\"1\" /><input type=\"hidden\" name=\"type\" value=\"xml\" /><input type=\"hidden\" name=\"key\" value=\"".$namesilo_apikey."\" /><input type=\"hidden\" name=\"domain\" value=\"".$namesilo_domain."\" /><input type=\"hidden\" name=\"rrhost\" value=\"".$namesilo_subdomain."\" /><input type=\"hidden\" name=\"rrttl\" value=\"7200\" /><input type=\"hidden\" name=\"rrid\" value=\"".$domainid."\" />Enter New IP: <input type=\"text\" name=\"rrvalue\" /> <input type=\"submit\" value=\"Submit\" /></form>";
+			}
+			?></li>
+		</ol>
+	</p>
+
 </body>
 </html>

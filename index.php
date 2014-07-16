@@ -10,8 +10,9 @@ if ($_GET['logout']=="yes") {
 	header( 'Location: index.php' );
 }
 
-//pw for the page itself
-$secretpasswordA = 'givememinecraft';
+//pw for the page itself; using 2 for levels
+$secretpasswordA = 'iloveminecraft';
+$secretpasswordB = 'Goahead!1';
 
 if ($_SESSION['hmauthenticated'] == true) {
 	$goahead = 'yes';
@@ -24,6 +25,11 @@ if ($_SESSION['hmauthenticated'] == true) {
 			$_SESSION['hmauthenticated'] = true;
 			$_SESSION['hmauthlvl'] = "A";
 			if ($_GET['ready']!="yes") header( 'Location: index_minecraft.php?ready=yes' );
+			$goahead = 'yes';
+		} elseif ($password == $secretpasswordB) {
+			$_SESSION['hmauthenticated'] = true;
+			$_SESSION['hmauthlvl'] = "B";
+			if ($_GET['ready']!="yes") header( 'Location: index_all.php?ready=yes' );
 			$goahead = 'yes';
 		} else {
 			$error = 'Incorrect password';
@@ -40,4 +46,5 @@ if ($goahead != 'yes') {
 
 $whatlevel = $_SESSION['hmauthlvl'];
 if ($whatlevel=="A") header( 'Location: index_minecraft.php?ready=yes' );
+if ($whatlevel=="B") header( 'Location: index_all.php?ready=yes' );
 ?>
