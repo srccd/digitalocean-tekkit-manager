@@ -4,12 +4,10 @@ Written by SrcCd.com.
 Most of this comes from redwallhp:
 https://github.com/redwallhp/MCServerStatus
 */
-session_start();
 
 $servers = array(
 	$_GET['ip'] . ":" . $_GET['port']
 );
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -112,27 +110,27 @@ class Server {
 
 class Stats {
 	public static function retrieve( Server $server ) {
-		$socket = stream_socket_client(sprintf('tcp://%s:%u', $server->getHostname(), $server->getPort()), $errno, $errstr, 1);
+		$socket = @stream_socket_client(sprintf('tcp://%s:%u', $server->getHostname(), $server->getPort()), $errno, $errstr, 1);
 		$stats = new \stdClass;
 		$stats->is_online = false;
 
 		if (!$socket)
 			return $stats;
 
-		fwrite($socket, "\xfe\x01");
-		$data = fread($socket, 1024);
+		fwrite($socket, "\xfe");
+		$data = fread($socket, 256);
 		fclose($socket);
 
 		// Is this a disconnect with the ping?
 		if($data == false AND substr($data, 0, 1) != "\xFF") 
 			return $stats;
 
-		$data = substr($data, 9);
+		$data = substr($data, 3);
 		$data = mb_convert_encoding($data, 'auto', 'UCS-2');
-		$data = explode("\x00", $data);
+		$data = explode("\xA7", $data);
 
 		$stats->is_online = true;
-		list($stats->protocol_version, $stats->game_version, $stats->motd, $stats->online_players, $stats->max_players) = $data;
+		list($stats->motd, $stats->online_players, $stats->max_players) = $data;
 
 		return $stats;
 	}
